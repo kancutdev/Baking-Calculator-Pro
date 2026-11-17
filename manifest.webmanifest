@@ -1,0 +1,9 @@
+{
+  "name": "Baking Calculator Pro",
+  "short_name": "Baking Calc",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f7f3ee",
+  "theme_color": "#704b37",
+  "icons": []
+}
