@@ -1,9 +1,11 @@
 {
   "name": "Baking Calculator Pro",
-  "short_name": "Baking Calc",
+  "short_name": "Baking Pro",
+  "description": "Kalkulator HPP, resep, satuan dan ukuran loyang untuk baker.",
   "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#f7f3ee",
   "theme_color": "#704b37",
-  "icons": []
+  "lang": "id"
 }
