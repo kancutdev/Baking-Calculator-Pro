@@ -120,52 +120,59 @@
 
   function renderDashboard() {
     const s = S.getState();
+    const V = window.BCP.visuals;
 
     if (U.$('dashStatRecipes')) U.$('dashStatRecipes').textContent = s.recipes.length;
     if (U.$('dashStatMaterials')) U.$('dashStatMaterials').textContent = s.materials.length;
     if (U.$('dashStatHistory')) U.$('dashStatHistory').textContent = s.history.length;
+    if (U.$('dashHeroRecipes')) U.$('dashHeroRecipes').textContent = s.recipes.length;
+    if (U.$('dashHeroMaterials')) U.$('dashHeroMaterials').textContent = s.materials.length;
+    if (U.$('dashHeroHistory')) U.$('dashHeroHistory').textContent = s.history.length;
 
-    // Last opened / used recipe card
+    // Featured / Last opened recipe card with rich food photography
     const lastWrap = U.$('dashLastRecipe');
     if (lastWrap) {
       const lastId = s.meta?.lastOpenedRecipeId;
       const lastRecipe = (lastId && s.recipes.find((r) => r.id === lastId)) || s.recipes[s.recipes.length - 1] || null;
       if (!lastRecipe) {
-        lastWrap.innerHTML = `<div class="empty-state compact">
+        lastWrap.innerHTML = `<div class="empty-state compact empty-state-illustrated">
+          ${V ? V.imgTag({ src: V.IMAGES.cheesecake, alt: 'Ilustrasi resep unggulan', className: 'empty-thumb', width: 200, height: 120 }) : ''}
           <p class="empty-title">Belum ada resep tersimpan</p>
           <p class="empty-sub">Tambahkan resep manual atau import resep untuk mulai menghitung scaling, loyang, dan HPP.</p>
-          <button type="button" class="btn btn-primary btn-sm" id="dashCreateFirstBtn">+ Tambah Resep Pertama</button>
+          <button type="button" class="btn btn-primary btn-sm" id="dashCreateFirstBtn" style="margin-top:10px">+ Tambah Resep Pertama</button>
         </div>`;
         U.$('dashCreateFirstBtn')?.addEventListener('click', () => window.BCP.recipes?.openFormForNew());
       } else {
         const pan = window.BCP.recipes?.formatPanSummary(lastRecipe);
+        const imgSrc = V ? V.getRecipeImage(lastRecipe) : './assets/images/cheesecake.jpg';
         lastWrap.innerHTML = `
-          <div class="last-recipe-card">
-            <div class="lrc-head">
-              <div>
-                <span class="chip chip-accent">${U.esc(lastRecipe.category)}</span>
-                ${pan ? `<span class="chip chip-soft">${U.esc(pan)}</span>` : ''}
-              </div>
-              <span class="muted small-note">Diperbarui ${U.formatDate(lastRecipe.updatedAt)}</span>
+          <div class="featured-recipe-card">
+            <div class="frc-media" id="dashLastDetailMedia" role="button" tabindex="0">
+              ${V ? V.imgTag({ src: imgSrc, alt: lastRecipe.name, className: 'frc-img', width: 420, height: 240 }) : ''}
+              <span class="chip chip-glass frc-badge">${U.esc(lastRecipe.category)}</span>
             </div>
-            <h4 class="lrc-title">${U.esc(lastRecipe.name)}</h4>
-            <p class="lrc-meta">${U.fmt(lastRecipe.baseYield)} ${U.esc(lastRecipe.yieldUnit)} · ${lastRecipe.items.length} bahan</p>
-            <div class="lrc-actions">
-              <button type="button" class="btn btn-sm btn-primary" id="dashLastEdit">Edit Resep</button>
-              <button type="button" class="btn btn-sm btn-soft" id="dashLastScale">Scaling</button>
-              <button type="button" class="btn btn-sm btn-soft" id="dashLastPan">Loyang</button>
-              <button type="button" class="btn btn-sm btn-soft" id="dashLastHpp">Hitung HPP</button>
+            <div class="frc-body">
+              <div class="lrc-head">
+                ${pan ? `<span class="chip chip-soft">${U.esc(pan)}</span>` : '<span class="chip chip-accent">Resep Pilihan</span>'}
+                <span class="muted small-note">Diperbarui ${U.formatDate(lastRecipe.updatedAt)}</span>
+              </div>
+              <h4 class="lrc-title">${U.esc(lastRecipe.name)}</h4>
+              <p class="lrc-meta">${U.fmt(lastRecipe.baseYield)} ${U.esc(lastRecipe.yieldUnit)} · ${lastRecipe.items.length} bahan</p>
+              <div class="lrc-actions">
+                <button type="button" class="btn btn-sm btn-primary" id="dashLastDetail">Detail</button>
+                <button type="button" class="btn btn-sm btn-soft" id="dashLastEdit">Edit</button>
+                <button type="button" class="btn btn-sm btn-soft" id="dashLastScale">Scaling</button>
+                <button type="button" class="btn btn-sm btn-soft" id="dashLastHpp">Hitung HPP</button>
+              </div>
             </div>
           </div>
         `;
+        U.$('dashLastDetail')?.addEventListener('click', () => window.BCP.recipes?.openDetail(lastRecipe.id));
+        U.$('dashLastDetailMedia')?.addEventListener('click', () => window.BCP.recipes?.openDetail(lastRecipe.id));
         U.$('dashLastEdit')?.addEventListener('click', () => window.BCP.recipes?.openFormForEdit(lastRecipe.id));
         U.$('dashLastScale')?.addEventListener('click', () => {
           window.BCP.scaling?.loadRecipe(lastRecipe.id);
           showPage('scaling');
-        });
-        U.$('dashLastPan')?.addEventListener('click', () => {
-          window.BCP.pan?.loadRecipe(lastRecipe.id);
-          showPage('pan');
         });
         U.$('dashLastHpp')?.addEventListener('click', () => {
           window.BCP.hpp?.loadRecipe(lastRecipe.id);
@@ -174,7 +181,35 @@
       }
     }
 
-    // Recent calculations list
+    // Recent recipes visual strip (user's own recipes only — never injects sample data)
+    const recentRecSection = U.$('dashRecentRecipesCard');
+    const recentRecWrap = U.$('dashRecentRecipes');
+    if (recentRecSection && recentRecWrap) {
+      const recentRecipes = s.recipes.slice(-4).reverse();
+      if (!recentRecipes.length) {
+        recentRecSection.style.display = 'none';
+      } else {
+        recentRecSection.style.display = 'block';
+        recentRecWrap.innerHTML = recentRecipes.map((r) => {
+          const imgSrc = V ? V.getRecipeImage(r) : './assets/images/baking-ingredients.jpg';
+          return `<button type="button" class="mini-recipe-card" data-dash-rec="${U.esc(r.id)}">
+            <div class="mrc-thumb-wrap">
+              ${V ? V.imgTag({ src: imgSrc, alt: r.name, className: 'mrc-thumb', width: 220, height: 140 }) : ''}
+            </div>
+            <div class="mrc-info">
+              <span class="mrc-cat">${U.esc(r.category)}</span>
+              <strong class="mrc-name">${U.esc(r.name)}</strong>
+              <span class="mrc-meta">${U.fmt(r.baseYield)} ${U.esc(r.yieldUnit)} · ${r.items.length} bahan</span>
+            </div>
+          </button>`;
+        }).join('');
+        recentRecWrap.querySelectorAll('[data-dash-rec]').forEach((btn) => {
+          btn.addEventListener('click', () => window.BCP.recipes?.openDetail(btn.getAttribute('data-dash-rec')));
+        });
+      }
+    }
+
+    // Recent calculations list with color-coded visual icons
     const recentWrap = U.$('dashRecentHistory');
     if (recentWrap) {
       const recent = s.history.slice(-5).reverse();
@@ -184,18 +219,20 @@
           <p class="empty-sub">Simpan hasil HPP, Scaling, Konversi Loyang, atau Konversi Satuan untuk melihat catatan terbaru di sini.</p>
         </div>`;
       } else {
-        recentWrap.innerHTML = recent.map((h) => `
+        recentWrap.innerHTML = recent.map((h) => {
+          const hv = V ? V.getHistoryVisual(h.type) : null;
+          return `
           <div class="recent-item" data-dash-hist="${U.esc(h.id)}" role="button" tabindex="0">
             <div class="ri-left">
-              <span class="chip chip-soft">${U.esc(h.type)}</span>
-              <div>
+              ${hv ? `<span class="hist-icon-tile hist-icon-sm ${hv.tone}" aria-hidden="true">${hv.svg}</span>` : ''}
+              <div style="min-width:0">
                 <strong class="ri-title">${U.esc(h.name)}</strong>
-                <div class="ri-sub">${U.esc(h.summary)}</div>
+                <div class="ri-sub">${U.esc(h.type)} · ${U.esc(h.summary)}</div>
               </div>
             </div>
             <span class="ri-date">${U.formatDate(h.date)}</span>
-          </div>
-        `).join('');
+          </div>`;
+        }).join('');
         recentWrap.querySelectorAll('[data-dash-hist]').forEach((el) => {
           el.addEventListener('click', () => window.BCP.history?.openDetail(el.getAttribute('data-dash-hist')));
         });

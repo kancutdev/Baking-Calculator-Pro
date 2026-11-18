@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'baking-calculator-pro-v1.3.0';
+const CACHE_VERSION = 'baking-calculator-pro-v1.4.0';
 const CORE_ASSETS = [
   './',
   './index.html',
@@ -8,7 +8,9 @@ const CORE_ASSETS = [
   './assets/icon.svg',
   './assets/icon-192.png',
   './assets/icon-512.png',
+  './assets/images/hero-baking.jpg',
   './js/utils.js',
+  './js/visuals.js',
   './js/storage.js',
   './js/ingredient-database.js',
   './js/recipe-book.js',

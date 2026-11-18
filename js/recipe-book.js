@@ -43,6 +43,11 @@
       }
     });
 
+    U.$('btnCloseRecipeDetailModal')?.addEventListener('click', closeDetailModal);
+    U.$('recipeDetailModal')?.addEventListener('click', (e) => {
+      if (e.target === U.$('recipeDetailModal')) closeDetailModal();
+    });
+
     S.subscribe(render);
     render();
   }
@@ -548,12 +553,105 @@
     }
   }
 
+  function closeDetailModal() {
+    const modal = U.$('recipeDetailModal');
+    if (!modal) return;
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+  }
+
+  function openDetail(id) {
+    const s = S.getState();
+    const r = s.recipes.find((x) => x.id === id);
+    const modal = U.$('recipeDetailModal');
+    const body = U.$('recipeDetailBody');
+    if (!r || !modal || !body) return;
+
+    S.setLastOpenedRecipe(r.id);
+    const V = window.BCP.visuals;
+    const imgSrc = V ? V.getRecipeImage(r) : './assets/images/baking-ingredients.jpg';
+    const panBadge = formatPanSummary(r);
+
+    if (U.$('recipeDetailTitle')) U.$('recipeDetailTitle').textContent = r.name;
+
+    body.innerHTML = `
+      <div class="rd-hero-wrap">
+        ${V ? V.imgTag({ src: imgSrc, alt: r.name, className: 'rd-hero-img', width: 720, height: 420, lazy: false }) : ''}
+        <div class="rd-hero-badges">
+          <span class="chip chip-glass">${U.esc(r.category)}</span>
+          ${r.source === 'ocr' || r.source === 'import' ? '<span class="chip chip-info">Import OCR</span>' : ''}
+          ${panBadge ? `<span class="chip chip-glass">${U.esc(panBadge)}</span>` : ''}
+        </div>
+      </div>
+
+      ${r.description ? `<p class="rd-desc">${U.esc(r.description)}</p>` : ''}
+
+      <div class="rd-meta-strip">
+        <div><span class="muted small-note">Hasil Resep</span><strong>${U.fmt(r.baseYield)} ${U.esc(r.yieldUnit)}</strong></div>
+        <div><span class="muted small-note">Total Bahan</span><strong>${r.items.length} item</strong></div>
+        <div><span class="muted small-note">Diperbarui</span><strong>${U.formatDate(r.updatedAt)}</strong></div>
+      </div>
+
+      <h4 class="detail-subhead">Daftar Bahan</h4>
+      <div class="detail-list">
+        ${r.items.map((it) => {
+          const qtyStr = it.qty !== null ? `${U.fmt(it.qty)} ` : '';
+          return `<div class="detail-list-row">
+            <div>
+              <strong>${U.esc(it.name)}</strong>
+              ${it.note ? `<div class="small-note muted">${U.esc(it.note)}</div>` : ''}
+            </div>
+            <strong>${qtyStr}${U.esc(it.unit)}</strong>
+          </div>`;
+        }).join('')}
+      </div>
+
+      ${r.notes ? `<h4 class="detail-subhead">Catatan Resep</h4><div class="rd-notes">${U.esc(r.notes)}</div>` : ''}
+
+      <div class="actions-row" style="margin-top:18px">
+        <button type="button" class="btn btn-primary btn-sm" id="rdBtnEdit">Edit Resep</button>
+        <button type="button" class="btn btn-soft btn-sm" id="rdBtnScale">Scaling</button>
+        <button type="button" class="btn btn-soft btn-sm" id="rdBtnPan">Konversi Loyang</button>
+        <button type="button" class="btn btn-soft btn-sm" id="rdBtnHpp">Hitung HPP</button>
+        <button type="button" class="btn btn-danger-outline btn-sm" id="rdBtnDel">Hapus</button>
+      </div>
+    `;
+
+    U.$('rdBtnEdit')?.addEventListener('click', () => {
+      closeDetailModal();
+      openFormForEdit(r.id);
+    });
+    U.$('rdBtnScale')?.addEventListener('click', () => {
+      closeDetailModal();
+      window.BCP.scaling?.loadRecipe(r.id);
+      window.BCP.app?.showPage('scaling');
+    });
+    U.$('rdBtnPan')?.addEventListener('click', () => {
+      closeDetailModal();
+      window.BCP.pan?.loadRecipe(r.id);
+      window.BCP.app?.showPage('pan');
+    });
+    U.$('rdBtnHpp')?.addEventListener('click', () => {
+      closeDetailModal();
+      window.BCP.hpp?.loadRecipe(r.id);
+      window.BCP.app?.showPage('hpp');
+    });
+    U.$('rdBtnDel')?.addEventListener('click', async () => {
+      closeDetailModal();
+      await deleteRecipe(r.id);
+    });
+
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+  }
+
   function render() {
     const container = U.$('recipeCardsGrid');
     const countEl = U.$('bookCountLabel');
     if (!container) return;
 
     const s = S.getState();
+    const V = window.BCP.visuals;
     const filtered = s.recipes.filter((r) => {
       const catOk = selectedCategory === 'Semua' || r.category === selectedCategory;
       const qOk = !searchQuery ||
@@ -569,7 +667,8 @@
     }
 
     if (!s.recipes.length) {
-      container.innerHTML = `<div class="empty-state">
+      container.innerHTML = `<div class="empty-state empty-state-illustrated">
+        ${V ? V.imgTag({ src: V.IMAGES.bakingIngredients, alt: 'Ilustrasi bahan baking', className: 'empty-thumb', width: 220, height: 130 }) : ''}
         <p class="empty-title">Buku Resep masih kosong</p>
         <p class="empty-sub">Mulai dengan menambah resep manual atau gunakan Smart Recipe Import untuk membaca resep dari foto/dokumen.</p>
         <div class="actions-center">
@@ -592,56 +691,40 @@
 
     container.innerHTML = filtered.slice().reverse().map((r) => {
       const panBadge = formatPanSummary(r);
-      const previewItems = r.items.slice(0, 4).map((i) => {
-        const qtyStr = i.qty !== null ? `${U.fmt(i.qty)} ` : '';
-        return `${qtyStr}${U.esc(i.unit)} ${U.esc(i.name)}`;
-      }).join(' · ');
-      const moreCount = r.items.length > 4 ? ` +${r.items.length - 4} bahan lainnya` : '';
+      const imgSrc = V ? V.getRecipeImage(r) : './assets/images/baking-ingredients.jpg';
 
-      return `<article class="recipe-card-item">
-        <div class="rc-top">
-          <div class="rc-badges">
-            <span class="chip chip-accent">${U.esc(r.category)}</span>
-            ${r.source === 'ocr' || r.source === 'import' ? '<span class="chip chip-info">Import</span>' : ''}
-            ${panBadge ? `<span class="chip chip-soft">${U.esc(panBadge)}</span>` : ''}
+      return `<article class="recipe-catalog-card">
+        <div class="rcat-media" data-rc-detail="${U.esc(r.id)}" role="button" tabindex="0" aria-label="Lihat detail ${U.esc(r.name)}">
+          ${V ? V.imgTag({ src: imgSrc, alt: r.name, className: 'rcat-img', width: 420, height: 270 }) : ''}
+          <div class="rcat-media-badges">
+            <span class="chip chip-glass">${U.esc(r.category)}</span>
+            ${r.source === 'ocr' || r.source === 'import' ? '<span class="chip chip-info">OCR</span>' : ''}
           </div>
-          <span class="rc-date">${U.formatDate(r.updatedAt)}</span>
+          ${panBadge ? `<span class="rcat-pan-pill">${U.esc(panBadge)}</span>` : ''}
         </div>
-        <h3 class="rc-title">${U.esc(r.name)}</h3>
-        ${r.description ? `<p class="rc-desc">${U.esc(r.description)}</p>` : ''}
-        <div class="rc-meta">
-          <span><strong>Hasil:</strong> ${U.fmt(r.baseYield)} ${U.esc(r.yieldUnit)}</span>
-          <span><strong>Bahan:</strong> ${r.items.length} item</span>
-        </div>
-        <p class="rc-preview">${previewItems}${moreCount}</p>
-        <div class="rc-actions">
-          <button type="button" class="btn btn-sm btn-primary" data-rc-edit="${U.esc(r.id)}">Buka / Edit</button>
-          <button type="button" class="btn btn-sm btn-soft" data-rc-scale="${U.esc(r.id)}">Scaling</button>
-          <button type="button" class="btn btn-sm btn-soft" data-rc-pan="${U.esc(r.id)}">Loyang</button>
-          <button type="button" class="btn btn-sm btn-soft" data-rc-hpp="${U.esc(r.id)}">Hitung HPP</button>
-          <button type="button" class="btn btn-sm btn-danger-outline" data-rc-del="${U.esc(r.id)}">Hapus</button>
+        <div class="rcat-body">
+          <div class="rcat-meta-row">
+            <span>${U.fmt(r.baseYield)} ${U.esc(r.yieldUnit)}</span>
+            <span>•</span>
+            <span>${r.items.length} bahan</span>
+          </div>
+          <h3 class="rcat-title" data-rc-detail="${U.esc(r.id)}" role="button" tabindex="0">${U.esc(r.name)}</h3>
+          ${r.description ? `<p class="rcat-desc">${U.esc(r.description)}</p>` : ''}
+          <div class="rcat-actions">
+            <button type="button" class="btn btn-sm btn-primary" data-rc-detail="${U.esc(r.id)}">Detail</button>
+            <button type="button" class="btn btn-sm btn-soft" data-rc-edit="${U.esc(r.id)}">Edit</button>
+            <button type="button" class="btn btn-sm btn-ghost" data-rc-hpp="${U.esc(r.id)}" title="Hitung HPP resep ini">HPP</button>
+            <button type="button" class="btn btn-sm btn-danger-outline" data-rc-del="${U.esc(r.id)}" aria-label="Hapus ${U.esc(r.name)}">Hapus</button>
+          </div>
         </div>
       </article>`;
     }).join('');
 
+    container.querySelectorAll('[data-rc-detail]').forEach((el) => {
+      el.addEventListener('click', () => openDetail(el.getAttribute('data-rc-detail')));
+    });
     container.querySelectorAll('[data-rc-edit]').forEach((b) => {
       b.addEventListener('click', () => openFormForEdit(b.getAttribute('data-rc-edit')));
-    });
-    container.querySelectorAll('[data-rc-scale]').forEach((b) => {
-      b.addEventListener('click', () => {
-        const id = b.getAttribute('data-rc-scale');
-        S.setLastOpenedRecipe(id);
-        window.BCP.scaling?.loadRecipe(id);
-        window.BCP.app?.showPage('scaling');
-      });
-    });
-    container.querySelectorAll('[data-rc-pan]').forEach((b) => {
-      b.addEventListener('click', () => {
-        const id = b.getAttribute('data-rc-pan');
-        S.setLastOpenedRecipe(id);
-        window.BCP.pan?.loadRecipe(id);
-        window.BCP.app?.showPage('pan');
-      });
     });
     container.querySelectorAll('[data-rc-hpp]').forEach((b) => {
       b.addEventListener('click', () => {
@@ -659,6 +742,7 @@
   window.BCP.recipes = {
     init,
     render,
+    openDetail,
     openFormForNew,
     openFormForEdit,
     openFormWithImportedData,

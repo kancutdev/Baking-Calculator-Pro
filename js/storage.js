@@ -9,7 +9,7 @@
   const LEGACY_DBKEY = 'bakingCalculatorPro_v1';
   const CORRUPT_BACKUP_KEY = 'bakingCalculatorPro_corrupt_backup';
   const SCHEMA_VERSION = 2;
-  const APP_VERSION = '1.3.0';
+  const APP_VERSION = '1.4.0';
   const MAX_HISTORY = 300;
 
   let listeners = [];

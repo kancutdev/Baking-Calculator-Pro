@@ -329,15 +329,20 @@
       return;
     }
 
+    const V = window.BCP.visuals;
     const rowsHtml = filtered.map((m) => {
       const unitPrice = S.getMaterialUnitPrice(m);
       const effQty = S.getMaterialEffectiveUsageQty(m);
       const packInfo = m.purchaseUnit !== m.unit
         ? `${U.fmt(m.qty)} ${U.esc(m.purchaseUnit)} (${U.fmt(effQty)} ${U.esc(m.unit)})`
         : `${U.fmt(m.qty)} ${U.esc(m.purchaseUnit)}`;
+      const vis = V ? V.getMaterialVisual(`${m.category} ${m.name}`) : null;
       return `<tr>
         <td data-label="Bahan">
-          <div class="cell-main"><strong>${U.esc(m.name)}</strong><span class="chip chip-soft">${U.esc(m.category)}</span></div>
+          <div class="mat-cell-visual">
+            ${vis ? `<span class="cat-icon-tile ${vis.tone}" aria-hidden="true">${vis.svg}</span>` : ''}
+            <div class="cell-main"><strong>${U.esc(m.name)}</strong><span class="chip chip-soft">${U.esc(m.category)}</span></div>
+          </div>
         </td>
         <td data-label="Harga Beli">${U.money(m.price)}</td>
         <td data-label="Kemasan">${packInfo}</td>

@@ -101,6 +101,10 @@
     const statusEl = U.$('importStatusBox');
     const barWrap = U.$('importProgressWrap');
     const barFill = U.$('importProgressFill');
+    const dropzone = U.$('importDropzone');
+    if (dropzone) {
+      dropzone.classList.toggle('is-scanning', state === 'loading');
+    }
     if (statusEl) {
       statusEl.textContent = message;
       statusEl.className = `import-status status-${state}`;

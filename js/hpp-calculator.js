@@ -286,11 +286,16 @@
         ? `<strong>${U.money(ev.cost)}</strong>`
         : `<span class="text-danger">Belum dihitung</span>`;
 
+      const vis = window.BCP.visuals ? window.BCP.visuals.getMaterialVisual(`${ev.mat?.category || ''} ${ev.name || row.name}`) : null;
+
       return `<div class="hpp-row-card ${statusClass}" data-row-id="${U.esc(row.rowId)}">
         <div class="hpp-row-main">
           <div class="hpp-col hpp-col-mat">
             <label class="ing-mobile-label">Bahan Baku</label>
-            <select class="hpp-mat-select">${matOptions}</select>
+            <div class="hpp-mat-input-wrap">
+              ${vis ? `<span class="cat-icon-tile cat-icon-sm ${vis.tone}" aria-hidden="true">${vis.svg}</span>` : ''}
+              <select class="hpp-mat-select">${matOptions}</select>
+            </div>
             ${isCustom ? `
               <div class="hpp-custom-fields">
                 <input type="text" class="hpp-custom-name" placeholder="Nama bahan" value="${U.esc(row.name)}">

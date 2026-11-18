@@ -129,6 +129,7 @@
 
     if (invalid) {
       if (summaryEl) summaryEl.style.display = 'none';
+      if (U.$('panVisualBox')) U.$('panVisualBox').style.display = 'none';
       if (actionsEl) actionsEl.style.display = 'none';
       if (tableBox) tableBox.innerHTML = `<div class="alert alert-warning">Masukkan ukuran loyang asal dan tujuan lebih besar dari 0 cm.</div>`;
       lastComputed = null;
@@ -174,6 +175,12 @@
       U.$('panFactorDisplay').textContent = `${U.fmt(factor, 4)}×`;
       U.$('panFromAreaDisplay').textContent = `${U.fmt(fromArea, 2)} cm²`;
       U.$('panToAreaDisplay').textContent = `${U.fmt(toArea, 2)} cm²`;
+    }
+
+    const visualBox = U.$('panVisualBox');
+    if (visualBox && window.BCP.visuals) {
+      visualBox.style.display = 'block';
+      visualBox.innerHTML = window.BCP.visuals.renderPanComparisonSvg(lastComputed);
     }
 
     if (actionsEl) {

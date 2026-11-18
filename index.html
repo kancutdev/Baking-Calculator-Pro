@@ -95,15 +95,35 @@
       <main class="main-content">
         <!-- ==================== 1. DASHBOARD ==================== -->
         <section class="app-page active" id="page-dashboard">
-          <div class="hero-card">
-            <div>
-              <span class="hero-eyebrow">Baking Calculator Pro</span>
-              <h2>Kelola Resep &amp; Hitung HPP Lebih Presisi</h2>
-              <p>Semua formula, scaling batch, konversi loyang, dan biaya modal produksi tersimpan rapi secara lokal di perangkat Anda.</p>
-            </div>
-            <div class="hero-actions">
-              <button type="button" class="btn btn-hero-light" id="btnDashAddRecipe">+ Tambah Resep</button>
-              <button type="button" class="btn btn-hero-ghost" data-nav-page="import">Import / OCR Resep</button>
+          <!-- Premium Editorial Hero with Appetizing Baking Photography -->
+          <div class="hero-editorial">
+            <img class="hero-photo" src="./assets/images/hero-baking.jpg" alt="Aneka kue cheesecake, chocolate cake, croissant, cookies, roti, dan bahan baking" width="1200" height="670" decoding="async">
+            <div class="hero-scrim" aria-hidden="true"></div>
+            <div class="hero-inner">
+              <div class="hero-copy">
+                <span class="hero-eyebrow">Baking Calculator Pro · Artisan Toolkit</span>
+                <h2>Baking Lebih Mudah, Presisi &amp; Terkendali.</h2>
+                <p>Hitung resep, sesuaikan ukuran loyang, kelola Buku Resep, ekstrak resep lewat OCR, dan hitung HPP produksi dengan lebih mudah.</p>
+                <div class="hero-actions">
+                  <button type="button" class="btn btn-hero-light" id="btnDashAddRecipe">+ Tambah Resep</button>
+                  <button type="button" class="btn btn-hero-ghost" data-nav-page="import">Import / OCR Resep</button>
+                  <button type="button" class="btn btn-hero-ghost" data-nav-page="hpp">Kalkulator HPP</button>
+                </div>
+                <div class="hero-metrics">
+                  <button type="button" class="hero-metric-pill" data-nav-page="book">
+                    <strong id="dashHeroRecipes">0</strong>
+                    <span>Resep</span>
+                  </button>
+                  <button type="button" class="hero-metric-pill" data-nav-page="materials">
+                    <strong id="dashHeroMaterials">0</strong>
+                    <span>Bahan Baku</span>
+                  </button>
+                  <button type="button" class="hero-metric-pill" data-nav-page="history">
+                    <strong id="dashHeroHistory">0</strong>
+                    <span>Riwayat</span>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -125,42 +145,94 @@
             </button>
           </div>
 
+          <!-- Image-Rich Feature Cards -->
           <div class="card">
             <div class="card-head">
-              <h3>Akses Cepat Fitur</h3>
+              <div>
+                <h3>Jelajahi Fitur Utama</h3>
+                <p class="field-hint" style="margin-top:2px">Pilih alat bantu baking yang Anda butuhkan hari ini.</p>
+              </div>
             </div>
-            <div class="quick-grid">
-              <button type="button" class="quick-tile" data-nav-page="book">
-                <span class="quick-tile-title">Buku Resep</span>
-                <span class="quick-tile-sub">Tambah, edit, cari, dan kelola seluruh formula kue &amp; roti.</span>
+            <div class="feature-cards-grid">
+              <button type="button" class="feature-card" data-nav-page="book">
+                <div class="fc-media">
+                  <img src="./assets/images/cheesecake.jpg" alt="Katalog Buku Resep" width="420" height="260" loading="lazy" decoding="async">
+                  <span class="fc-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v18H6.5A2.5 2.5 0 0 1 4 18.5z"/><path d="M4 18.5A2.5 2.5 0 0 1 6.5 16H20"/></svg></span>
+                </div>
+                <div class="fc-body">
+                  <span class="fc-title">Buku Resep</span>
+                  <span class="fc-sub">Simpan, cari, dan kelola seluruh formula kue &amp; roti.</span>
+                  <span class="fc-cta">Buka Katalog →</span>
+                </div>
               </button>
-              <button type="button" class="quick-tile" data-nav-page="import">
-                <span class="quick-tile-title">Smart Recipe Import</span>
-                <span class="quick-tile-sub">Ekstrak bahan otomatis dari foto, PDF, Word, Excel, atau teks.</span>
+
+              <button type="button" class="feature-card" data-nav-page="import">
+                <div class="fc-media">
+                  <img src="./assets/images/recipe-import.jpg" alt="Smart Recipe Import dan OCR" width="420" height="260" loading="lazy" decoding="async">
+                  <span class="fc-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 16V4m0 0-4 4m4-4 4 4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg></span>
+                </div>
+                <div class="fc-body">
+                  <span class="fc-title">Smart Recipe Import</span>
+                  <span class="fc-sub">Scan foto, PDF, Word, Excel, atau tempel teks ke form resep.</span>
+                  <span class="fc-cta">Import / OCR →</span>
+                </div>
               </button>
-              <button type="button" class="quick-tile" data-nav-page="hpp">
-                <span class="quick-tile-title">Kalkulator HPP</span>
-                <span class="quick-tile-sub">Hitung modal bahan, biaya tambahan, dan rekomendasi harga jual.</span>
+
+              <button type="button" class="feature-card" data-nav-page="hpp">
+                <div class="fc-media">
+                  <img src="./assets/images/baking-ingredients.jpg" alt="Kalkulator HPP dan Bahan Baku" width="420" height="260" loading="lazy" decoding="async">
+                  <span class="fc-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 12h3m4 0h1M8 16h3m4 0h1"/></svg></span>
+                </div>
+                <div class="fc-body">
+                  <span class="fc-title">Kalkulator HPP</span>
+                  <span class="fc-sub">Hitung modal bahan, biaya kemasan, dan harga jual ideal.</span>
+                  <span class="fc-cta">Hitung HPP →</span>
+                </div>
               </button>
-              <button type="button" class="quick-tile" data-nav-page="scaling">
-                <span class="quick-tile-title">Scaling Resep</span>
-                <span class="quick-tile-sub">Sesuaikan takaran seluruh bahan sesuai target pcs/porsi/loyang.</span>
+
+              <button type="button" class="feature-card" data-nav-page="scaling">
+                <div class="fc-media">
+                  <img src="./assets/images/kue-tradisional.jpg" alt="Scaling Resep" width="420" height="260" loading="lazy" decoding="async">
+                  <span class="fc-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20h16M7 16V9m5 7V4m5 12v-5"/></svg></span>
+                </div>
+                <div class="fc-body">
+                  <span class="fc-title">Scaling Resep</span>
+                  <span class="fc-sub">Gandakan atau perkecil takaran sesuai target pcs/porsi.</span>
+                  <span class="fc-cta">Mulai Scaling →</span>
+                </div>
               </button>
-              <button type="button" class="quick-tile" data-nav-page="pan">
-                <span class="quick-tile-title">Konversi Loyang</span>
-                <span class="quick-tile-sub">Hitung ulang takaran bolu &amp; cake antar ukuran loyang bulat/kotak.</span>
+
+              <button type="button" class="feature-card" data-nav-page="pan">
+                <div class="fc-media">
+                  <img src="./assets/images/pan-conversion.jpg" alt="Konversi Ukuran Loyang" width="420" height="260" loading="lazy" decoding="async">
+                  <span class="fc-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5"/></svg></span>
+                </div>
+                <div class="fc-body">
+                  <span class="fc-title">Konversi Loyang</span>
+                  <span class="fc-sub">Sesuaikan resep bolu &amp; cake antar loyang bulat dan kotak.</span>
+                  <span class="fc-cta">Ubah Loyang →</span>
+                </div>
               </button>
-              <button type="button" class="quick-tile" data-nav-page="units">
-                <span class="quick-tile-title">Konversi Satuan</span>
-                <span class="quick-tile-sub">Konversi gram, ml, sdm, sdt, dan cup berdasarkan densitas bahan.</span>
+
+              <button type="button" class="feature-card" data-nav-page="units">
+                <div class="fc-media">
+                  <img src="./assets/images/baking-tools.jpg" alt="Konversi Satuan dan Alat Ukur Baking" width="420" height="260" loading="lazy" decoding="async">
+                  <span class="fc-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 16V4m0 0-3 3m3-3 3 3M17 8v12m0 0-3-3m3 3 3-3"/></svg></span>
+                </div>
+                <div class="fc-body">
+                  <span class="fc-title">Konversi Satuan</span>
+                  <span class="fc-sub">Konversi gram, ml, sdm, sdt, dan cup memakai densitas bahan.</span>
+                  <span class="fc-cta">Konversi →</span>
+                </div>
               </button>
             </div>
           </div>
 
+          <!-- Featured Recipe & Recent History -->
           <div class="grid-2">
             <div class="card">
               <div class="card-head">
-                <h3>Resep Terakhir Digunakan</h3>
+                <h3>Resep Pilihan / Terakhir Dibuka</h3>
                 <button type="button" class="btn btn-sm btn-ghost" data-nav-page="book">Semua Resep</button>
               </div>
               <div id="dashLastRecipe"></div>
@@ -173,6 +245,15 @@
               </div>
               <div id="dashRecentHistory"></div>
             </div>
+          </div>
+
+          <!-- Recent User Recipes Strip -->
+          <div class="card" id="dashRecentRecipesCard" style="display:none">
+            <div class="card-head">
+              <h3>Resep Terbaru Anda</h3>
+              <button type="button" class="btn btn-sm btn-ghost" data-nav-page="book">Buka Katalog →</button>
+            </div>
+            <div id="dashRecentRecipes" class="mini-recipes-grid"></div>
           </div>
 
           <div class="card">
@@ -201,12 +282,18 @@
 
         <!-- ==================== 2. BUKU RESEP ==================== -->
         <section class="app-page" id="page-book">
-          <div class="page-header">
-            <div>
+          <div class="page-banner page-banner-book">
+            <div class="pb-text">
+              <span class="chip chip-accent">Katalog Resep Anda</span>
               <h2>Buku Resep</h2>
               <p>Pusat penyimpanan formula resep manual maupun hasil Import/OCR yang terhubung ke seluruh kalkulator.</p>
+              <div style="margin-top:12px">
+                <button type="button" class="btn btn-primary" id="btnAddRecipe">+ Tambah Resep</button>
+              </div>
             </div>
-            <button type="button" class="btn btn-primary" id="btnAddRecipe">+ Tambah Resep</button>
+            <div class="pb-media">
+              <img src="./assets/images/croissant.jpg" alt="Katalog aneka kue dan pastry" width="360" height="200" loading="lazy" decoding="async">
+            </div>
           </div>
 
           <!-- Unified Recipe Form (Manual & OCR/Import) -->
@@ -347,10 +434,14 @@
 
         <!-- ==================== 3. SMART RECIPE IMPORT / OCR ==================== -->
         <section class="app-page" id="page-import">
-          <div class="page-header">
-            <div>
+          <div class="page-banner">
+            <div class="pb-text">
+              <span class="chip chip-accent">Ekstraksi Otomatis</span>
               <h2>Smart Recipe Import &amp; OCR</h2>
               <p>Ekstrak nama resep dan daftar bahan secara otomatis dari foto/screenshot resep, PDF, Word, Excel, CSV, atau teks tempel langsung.</p>
+            </div>
+            <div class="pb-media">
+              <img src="./assets/images/recipe-import.jpg" alt="Workspace scan resep dengan buku dan ponsel" width="360" height="200" loading="lazy" decoding="async">
             </div>
           </div>
 
@@ -358,7 +449,11 @@
             <div class="card-head">
               <h3>1. Upload File atau Foto Resep</h3>
             </div>
-            <div class="dropzone" id="importDropzone">
+            <div class="dropzone dropzone-visual" id="importDropzone">
+              <div class="scan-frame-visual" aria-hidden="true">
+                <img src="./assets/images/recipe-import.jpg" alt="" width="120" height="72" loading="lazy" decoding="async">
+                <span class="scan-beam"></span>
+              </div>
               <div class="dropzone-title">Tarik file ke sini atau pilih dari perangkat</div>
               <p class="dropzone-sub">Mendukung JPG, PNG, WEBP (OCR), PDF, DOCX, XLSX, XLS, CSV, TXT · Maksimal 15 MB</p>
               <label class="file-btn-label" for="importFileInput">
@@ -408,10 +503,14 @@
 
         <!-- ==================== 4. RECIPE SCALING ==================== -->
         <section class="app-page" id="page-scaling">
-          <div class="page-header">
-            <div>
+          <div class="page-banner">
+            <div class="pb-text">
+              <span class="chip chip-accent">Skala Batch Presisi</span>
               <h2>Scaling Resep</h2>
               <p>Ubah jumlah hasil produksi resep secara proporsional. Resep asli di Buku Resep tetap aman dan tidak berubah.</p>
+            </div>
+            <div class="pb-media">
+              <img src="./assets/images/kue-tradisional.jpg" alt="Perbandingan porsi kue hasil scaling" width="360" height="200" loading="lazy" decoding="async">
             </div>
           </div>
 
@@ -454,6 +553,8 @@
               </div>
             </div>
 
+            <div id="scaleVisualBox" style="display:none;margin-top:14px"></div>
+
             <div id="scaleResultTable" style="margin-top:18px"></div>
 
             <div class="actions-row" id="scaleResultActions" style="display:none">
@@ -466,10 +567,14 @@
 
         <!-- ==================== 5. CAKE PAN CONVERSION ==================== -->
         <section class="app-page" id="page-pan">
-          <div class="page-header">
-            <div>
+          <div class="page-banner">
+            <div class="pb-text">
+              <span class="chip chip-accent">Bolu, Sponge &amp; Cake</span>
               <h2>Konversi Ukuran Loyang</h2>
-              <p>Hitung ulang takaran bahan khusus untuk bolu, sponge cake, dan kue yang menggunakan perbandingan ukuran loyang.</p>
+              <p>Hitung ulang takaran bahan khusus untuk bolu, sponge cake, dan kue yang menggunakan perbandingan ukuran loyang bulat maupun persegi.</p>
+            </div>
+            <div class="pb-media">
+              <img src="./assets/images/pan-conversion.jpg" alt="Aneka ukuran loyang bulat dan kotak" width="360" height="200" loading="lazy" decoding="async">
             </div>
           </div>
 
@@ -542,6 +647,8 @@
               </div>
             </div>
 
+            <div id="panVisualBox" style="display:none;margin-top:16px"></div>
+
             <div id="panResultTable" style="margin-top:18px"></div>
 
             <div class="actions-row" id="panResultActions" style="display:none">
@@ -554,10 +661,14 @@
 
         <!-- ==================== 6. KALKULATOR HPP ==================== -->
         <section class="app-page" id="page-hpp">
-          <div class="page-header">
-            <div>
+          <div class="page-banner no-print">
+            <div class="pb-text">
+              <span class="chip chip-accent">Analisis Biaya &amp; Margin</span>
               <h2>Kalkulator HPP</h2>
-              <p>Hitung modal bahan baku, biaya operasional/kemasan, HPP per pcs/porsi, dan rekomendasi harga jual.</p>
+              <p>Hitung modal bahan baku, biaya operasional/kemasan, HPP per pcs/porsi, dan rekomendasi harga jual secara presisi.</p>
+            </div>
+            <div class="pb-media">
+              <img src="./assets/images/baking-ingredients.jpg" alt="Bahan baku baking tepung telur gula mentega susu" width="360" height="200" loading="lazy" decoding="async">
             </div>
           </div>
 
@@ -636,10 +747,14 @@
 
         <!-- ==================== 7. DATABASE BAHAN BAKU ==================== -->
         <section class="app-page" id="page-materials">
-          <div class="page-header">
-            <div>
+          <div class="page-banner">
+            <div class="pb-text">
+              <span class="chip chip-accent">Inventori Harga Bahan</span>
               <h2>Database Bahan Baku</h2>
-              <p>Kelola harga beli, ukuran kemasan, dan konversi satuan bahan baku untuk perhitungan HPP otomatis.</p>
+              <p>Kelola harga beli, ukuran kemasan, kategori, dan konversi satuan bahan baku untuk perhitungan HPP otomatis.</p>
+            </div>
+            <div class="pb-media">
+              <img src="./assets/images/baking-ingredients.jpg" alt="Bahan baku baking tertata rapi" width="360" height="200" loading="lazy" decoding="async">
             </div>
           </div>
 
@@ -715,10 +830,14 @@
 
         <!-- ==================== 8. KONVERSI SATUAN ==================== -->
         <section class="app-page" id="page-units">
-          <div class="page-header">
-            <div>
+          <div class="page-banner">
+            <div class="pb-text">
+              <span class="chip chip-accent">Timbangan &amp; Takaran Dapur</span>
               <h2>Konversi Satuan Bahan</h2>
-              <p>Konversi berat, volume, dan takaran dapur secara presisi. Konversi berat ↔ volume selalu memakai densitas bahan.</p>
+              <p>Konversi berat, volume, dan takaran dapur secara presisi menggunakan densitas spesifik tiap bahan.</p>
+            </div>
+            <div class="pb-media">
+              <img src="./assets/images/baking-tools.jpg" alt="Timbangan digital, gelas ukur, dan sendok takar baking" width="360" height="200" loading="lazy" decoding="async">
             </div>
           </div>
 
@@ -842,7 +961,7 @@
           <div class="card" id="aboutSection">
             <div class="card-head">
               <h3>Tentang Baking Calculator Pro</h3>
-              <span class="chip chip-accent" id="aboutAppVersion">Versi 1.3.0</span>
+              <span class="chip chip-accent" id="aboutAppVersion">Versi 1.4.0</span>
             </div>
             <p style="margin-top:0"><strong>Baking Calculator Pro</strong> adalah aplikasi web statis untuk home baker, UMKM kue, dan bakery kecil. Dirancang agar ringan, presisi, dapat dijalankan secara lokal maupun melalui GitHub Pages tanpa akun dan tanpa biaya langganan.</p>
 
@@ -926,6 +1045,17 @@
     </div>
   </div>
 
+  <!-- ==================== RECIPE DETAIL MODAL ==================== -->
+  <div class="modal-backdrop" id="recipeDetailModal" aria-hidden="true">
+    <div class="modal-card modal-card-lg" role="dialog" aria-modal="true" aria-labelledby="recipeDetailTitle">
+      <div class="modal-head">
+        <h3 id="recipeDetailTitle">Detail Resep</h3>
+        <button type="button" class="btn btn-sm btn-ghost" id="btnCloseRecipeDetailModal">✕ Tutup</button>
+      </div>
+      <div id="recipeDetailBody"></div>
+    </div>
+  </div>
+
   <!-- ==================== HISTORY DETAIL MODAL ==================== -->
   <div class="modal-backdrop" id="historyDetailModal" aria-hidden="true">
     <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="historyDetailTitle">
@@ -943,6 +1073,7 @@
   <!-- ==================== MODULAR SCRIPTS (ZERO-BUILD) ==================== -->
   <script src="./social-links.js"></script>
   <script src="./js/utils.js"></script>
+  <script src="./js/visuals.js"></script>
   <script src="./js/storage.js"></script>
   <script src="./js/ingredient-database.js"></script>
   <script src="./js/recipe-book.js"></script>

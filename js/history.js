@@ -162,22 +162,28 @@
       return;
     }
 
-    container.innerHTML = list.map((h) => `
+    const V = window.BCP.visuals;
+    container.innerHTML = list.map((h) => {
+      const hv = V ? V.getHistoryVisual(h.type) : null;
+      return `
       <div class="history-card">
-        <div class="hc-body" data-hist-open="${U.esc(h.id)}" role="button" tabindex="0">
-          <div class="hc-top">
-            <span class="chip ${getTypeBadgeClass(h.type)}">${U.esc(h.type)}</span>
-            <span class="muted small-note">${U.formatDateTime(h.date)}</span>
+        <div class="hc-body hc-body-with-icon" data-hist-open="${U.esc(h.id)}" role="button" tabindex="0">
+          ${hv ? `<span class="hist-icon-tile ${hv.tone}" aria-hidden="true">${hv.svg}</span>` : ''}
+          <div class="hc-content">
+            <div class="hc-top">
+              <span class="chip ${getTypeBadgeClass(h.type)}">${U.esc(h.type)}</span>
+              <span class="muted small-note">${U.formatDateTime(h.date)}</span>
+            </div>
+            <h4 class="hc-title">${U.esc(h.name)}</h4>
+            <p class="hc-summary">${U.esc(h.summary || (h.total !== null ? U.money(h.total) : ''))}</p>
           </div>
-          <h4 class="hc-title">${U.esc(h.name)}</h4>
-          <p class="hc-summary">${U.esc(h.summary || (h.total !== null ? U.money(h.total) : ''))}</p>
         </div>
         <div class="hc-actions">
           <button type="button" class="btn btn-sm btn-soft" data-hist-open="${U.esc(h.id)}">Detail</button>
           <button type="button" class="btn btn-sm btn-danger-outline" data-hist-del="${U.esc(h.id)}" aria-label="Hapus riwayat">Hapus</button>
         </div>
-      </div>
-    `).join('');
+      </div>`;
+    }).join('');
 
     container.querySelectorAll('[data-hist-open]').forEach((el) => {
       el.addEventListener('click', () => openDetail(el.getAttribute('data-hist-open')));

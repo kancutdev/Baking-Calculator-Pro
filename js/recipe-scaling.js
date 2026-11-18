@@ -79,6 +79,7 @@
     const tableBox = U.$('scaleResultTable');
     const actions = U.$('scaleResultActions');
     if (summary) summary.style.display = 'none';
+    if (U.$('scaleVisualBox')) U.$('scaleVisualBox').style.display = 'none';
     if (actions) actions.style.display = 'none';
     if (tableBox) {
       tableBox.innerHTML = `<div class="empty-state">
@@ -139,6 +140,11 @@
       U.$('scaleFactorDisplay').textContent = `${U.fmt(factor, 4)}×`;
       U.$('scaleYieldDisplay').textContent = `${U.fmt(baseYield)} → ${U.fmt(targetYield)} ${r.yieldUnit}`;
       U.$('scaleItemCountDisplay').textContent = `${scaledItems.length} bahan`;
+    }
+    const visualBox = U.$('scaleVisualBox');
+    if (visualBox && window.BCP.visuals) {
+      visualBox.style.display = 'block';
+      visualBox.innerHTML = window.BCP.visuals.renderScalingVisual({ baseYield, targetYield, yieldUnit: r.yieldUnit, factor });
     }
     if (actions) actions.style.display = 'flex';
 
